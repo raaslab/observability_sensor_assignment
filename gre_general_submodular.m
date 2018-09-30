@@ -1,5 +1,5 @@
 % tracking by general pair assignment
-% based on the observability metric
+% based on the observability metric that is submodular. So that we use trace measure
 % we assume the number of sensors is two time the number of targets
 global u_max 
 
