@@ -59,32 +59,27 @@ trace_sum = zeros(1,max_step);
 % writerObj.FrameRate = 5; % How many frames per second.
 % open(writerObj); 
 for k = 1: max_step
-    % first obtain the assignment by greedy unique pair with trace. 
-    [r_pair_t_index{k}] = assign_gre_unipair_trace_fun(M,pr,pt_hat{k}); 
+    % first obtain the assignment by brute-force unique pair with trace. 
+    [~, r_pair_t_index] = assign_bf_unipair_trace_fun(N,M,pr,pt_hat{k}); 
     % then use assignment to update the estimate of the targets
     for t = 1:M % for each target, update the estimate
        
-        t_index = find(t==r_pair_t_index{k}(:,3)); %find which target, the row
         % then we know the index of associated two sensors
-        s1_index= r_pair_t_index{k}(t_index,1); 
-        s2_index= r_pair_t_index{k}(t_index,2);
+        s1_index= r_pair_t_index(2*t-1); 
+        s2_index= r_pair_t_index(2*t);
         
-
       [pt_hat{k+1}(t,1), pt_hat{k+1}(t,2), t_Sigma_hat{k+1}(2*t-1:2*t,:)] = KF (...
            pt_true{k}(t,1),pt_true{k}(t,2), pt_hat{k}(t,1), pt_hat{k}(t,2), t_Sigma_hat{k}(2*t-1:2*t,:),...
            [pr(s1_index,1);pr(s2_index,1)], [pr(s1_index,2);pr(s2_index,2)], [s1_index; s2_index], k);
   
-   
        normf_co(t,k)=norm(t_Sigma_hat{k}(2*t-1:2*t,:),'fro');
        co_trace(t,k)=trace(t_Sigma_hat{k}(2*t-1:2*t,:)); %trace(Sigma_hat(1:2,(2*k+1): 2*(k+1)));
        es_err(t,k)=sqrt((pt_hat{k}(t,1)-pt_true{k}(t,1))^2+(pt_hat{k}(t,2)-pt_true{k}(t,2))^2);
-   
-   
+      
    % afte the first update, the true position needs to be updated
        pt_true{k+1}(t,1) = cos(k/Omega(t)) + pt_true{1}(t,1);
        pt_true{k+1}(t,2) = sin(k/Omega(t)) + pt_true{1}(t,2);
-       
-       
+              
        % for each target and sensor-pair, plot 
            figure(1);
            title('Greedy Unique Pair Assignment with Trace','fontsize',14)
@@ -107,8 +102,8 @@ for k = 1: max_step
 %     frame = getframe(gcf); % 'gcf' can handle if you zoom in to take a movie.
 %     writeVideo(writerObj, frame);
       clf;
-    pt_x_store{k+1} = horzcat(pt_x_store{k}, pt_true{k+1}(:,1));
-    pt_y_store{k+1} = horzcat(pt_y_store{k}, pt_true{k+1}(:,2));
+     pt_x_store{k+1} = horzcat(pt_x_store{k}, pt_true{k+1}(:,1));
+     pt_y_store{k+1} = horzcat(pt_y_store{k}, pt_true{k+1}(:,2));
 end
 %       
 %   hold  off
@@ -125,7 +120,6 @@ end
            
            subplot(3,1,3)
            h(3)=plot(es_err(3,:));
-
            
            figure(3); clf; 
            axis equal; box on; hold on;
