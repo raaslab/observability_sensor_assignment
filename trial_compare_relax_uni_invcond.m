@@ -1,7 +1,7 @@
 clear all;      % clears all variables in your workspace
 min_num_targets  = 1;
-max_num_targets = 20; %set the target from 
-num_trials = 30;
+max_num_targets = 5; %set the target from 
+num_trials = 10;
 global u_max
 u_max=1; % maximum motion ability for the target
 for M = min_num_targets : max_num_targets % start from 1 target to 30 targets
@@ -13,24 +13,31 @@ for M = min_num_targets : max_num_targets % start from 1 target to 30 targets
             pt(:,1)=100.*rand(M,1);
             pt(:,2)=100.*rand(M,1);
             cla;
-            [perfect_value(i,M),unique_value(i,M),~] = compare_relax_uni_invcond_fun(M,pr,pt);
+            [perfect_value(i,M), bf_uni_value(i,M), gre_uni_value(i,M)] = compare_relax_uni_invcond_fun(M,pr,pt);
      end
 end
 for M = min_num_targets : max_num_targets
-avgperfect_value(M) = mean(perfect_value(:,M));
-avgunique_value(M) = mean(unique_value(:,M));
-stdperfect_value(M) = std(perfect_value(:,M));
-stdunique_value(M) = std(unique_value(:,M));
+avg_perfect(M) = mean(perfect_value(:,M));
+std_perfect(M) = std(perfect_value(:,M));
+
+avg_bf_uni(M) = mean(bf_uni_value(:,M));
+std_bf_uni(M) = std(bf_uni_value(:,M));
+
+avg_gre_uni(M) = mean(gre_uni_value(:,M));
+std_gre_uni(M) = std(gre_uni_value(:,M));
 end
 
 figure; hold on;
-errorbar(min_num_targets:max_num_targets,avgperfect_value(min_num_targets:max_num_targets),...
-    stdperfect_value(min_num_targets:max_num_targets), 'r');
-errorbar(min_num_targets:max_num_targets,avgunique_value(min_num_targets:max_num_targets),...
-    stdunique_value(min_num_targets:max_num_targets),'b');
-errorbar(min_num_targets:max_num_targets,1/3*avgperfect_value(min_num_targets:max_num_targets),...
-    stdperfect_value(min_num_targets:max_num_targets), 'r');
+errorbar(min_num_targets:max_num_targets,avg_perfect(min_num_targets:max_num_targets),...
+    std_perfect(min_num_targets:max_num_targets), 'r');
+errorbar(min_num_targets:max_num_targets,avg_bf_uni(min_num_targets:max_num_targets),...
+    std_bf_uni(min_num_targets:max_num_targets), 'm');
+errorbar(min_num_targets:max_num_targets,avg_gre_uni(min_num_targets:max_num_targets),...
+    std_gre_uni(min_num_targets:max_num_targets),'b');
+errorbar(min_num_targets:max_num_targets,1/3*avg_bf_uni(min_num_targets:max_num_targets),...
+    std_bf_uni(min_num_targets:max_num_targets), 'm');
 title('Comparison of Perfect Pair and Unique Pair Assignment')
-legend('Perfect Pair Assignment','Unique Pair Assignment','1/3 Perfect Pair Assignment');
+legend('Perfect Pair Assignment','Brute-force Unique Pair Assignment', ...
+    'Greedy Unique Pair Assignment', '1/3 Brute-force Unique Pair Assignment');
 xlabel('Number of targets');
 ylabel('Total Reward');

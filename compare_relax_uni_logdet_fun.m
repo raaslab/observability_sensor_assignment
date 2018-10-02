@@ -1,17 +1,21 @@
 %compare the perfect pair assignment and unique pair assignment with logdet
 % this function describe how to make perfect matching and unique pair assignment
-function [perfectvalue, unique_value, r_pair_t_index] = compare_relax_uni_logdet_fun(M,pr,pt)
+function [perfect_value, bf_uni_value, gre_uni_value] = compare_relax_uni_logdet_fun(M,pr,pt)
 
 pr_store = pr; % store the original sensor
 pt_store = pt; % store the original target
 
-%%%% using log_determinant
+% using log_determinant
 logdet_nn_m=logdet_calcu_nn_m(pr,pt,length(pr(:,1)),length(pt(:,1)));
 
+%%% three assignment algorithms
 % perfect assignment
-[perfectvalue, ~, ~]=bipartite_matching(logdet_nn_m);
+[perfect_value, ~, ~]=bipartite_matching(logdet_nn_m);
 
-% unique assignment
+%brute-force unique assignment
+ [bf_uni_value, ~] = assign_bf_unipair_logdet_fun(2*M, M, pr, pt); 
+
+% gre unique pair  assignment
 unique_eachstep=zeros(M,1);
 s_selected=zeros(M,2);
 r_pair_t_index = zeros(M,3);
@@ -38,6 +42,6 @@ for t=1:M
     %low_bound=invercond(pr,pt,uo_max,length(pr(:,1)),length(pt(:,1)));
 
 end
-unique_value=sum(unique_eachstep);
+gre_uni_value=sum(unique_eachstep);
 %appro_ratio=unique_value/perfectvalue; 
 end

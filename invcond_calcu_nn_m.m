@@ -28,7 +28,6 @@ thetaji=zeros(N*N,M);
 lambda_max=zeros(N*N,M);
 lambda_min=zeros(N*N,M);
 
-
 for i=1:N
     for j=1:N 
              for k=1:M
