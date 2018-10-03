@@ -1,6 +1,7 @@
+tic;
 clear all;      % clears all variables in your workspace
 min_num_targets  = 1;
-max_num_targets = 5; %set the target from 
+max_num_targets = 6; %set the target from 
 num_trials = 30;
 uo_max=1; % maximum motion ability for the target
 for M = min_num_targets : max_num_targets % start from 1 target to 30 targets
@@ -40,3 +41,4 @@ legend('Perfect Pair Assignment','Brute-force Unique Pair Assignment', 'Greedy U
     '1/3 Brute-force Unique Pair Assignment');
 xlabel('Number of targets');
 ylabel('Total Reward');
+timeElapsed = toc;

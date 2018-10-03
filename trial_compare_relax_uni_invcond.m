@@ -1,3 +1,4 @@
+tic;
 clear all;      % clears all variables in your workspace
 min_num_targets  = 1;
 max_num_targets = 5; %set the target from 
@@ -41,3 +42,4 @@ legend('Perfect Pair Assignment','Brute-force Unique Pair Assignment', ...
     'Greedy Unique Pair Assignment', '1/3 Brute-force Unique Pair Assignment');
 xlabel('Number of targets');
 ylabel('Total Reward');
+timeElapsed = toc;
