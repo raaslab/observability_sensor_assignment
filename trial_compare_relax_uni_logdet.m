@@ -1,7 +1,7 @@
 clear all;      % clears all variables in your workspace
 min_num_targets  = 1;
 max_num_targets = 5; %set the target from 
-num_trials = 10;
+num_trials = 30;
 uo_max=1; % maximum motion ability for the target
 for M = min_num_targets : max_num_targets % start from 1 target to 30 targets
      for i = 1  : num_trials % 100 trials
